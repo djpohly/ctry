@@ -3,14 +3,14 @@
 
 int main(void)
 {
-	fprintf(stderr, "specific catch cases\n");
+	fprintf(stderr, "error matches the first case\n");
 
 	try {
-		return 5;
-	catch_as(e):
-		if (e == 5) {
-			printf("caught\n");
-		}
+		return 3;
+	catch 3:
+		printf("caught\n");
+	catch 5:
+		printf("NOPE\n");
 	} endtry;
 
 	printf("after\n");

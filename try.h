@@ -1,13 +1,17 @@
 #ifndef _TRY_H
 #define _TRY_H
 
+#define CONCAT(x, y) CONCAT_SIMPLE(x, y)
+#define CONCAT_SIMPLE(x, y) x ## y
+
 #define try                                                \
 	{                                                  \
-		__label__ _post_catch, _post_finally;      \
-		void *_catch = &&_post_catch,              \
-		     *_finally = &&_post_finally;          \
+		__label__ _out;                            \
 		int _retval = 0;                           \
 		int _returned = 1;                         \
+		int _caught = 0;                           \
+		auto int try_func();                       \
+		_retval = try_func();                      \
 		inline int try_func() {                    \
 			__label__ _ret;                    \
 			if (0) {                           \
@@ -17,36 +21,27 @@
 			}                                  \
 //			{
 //				stuff to try
-#define _catch_start                                       \
+#define catch                                              \
 			}                                  \
 			goto _ret;                         \
 		}                                          \
-		auto inline int catch_func();              \
-		{                                          \
-			__label__ _catch;                  \
-			_catch = &&_catch;                 \
-			if (0) {                           \
-		_catch:                                    \
-				_returned = 1;             \
-				_retval = catch_func();    \
-				goto _post_catch;          \
-			}                                  \
+		auto inline int CONCAT(catch_func_, __LINE__)();              \
+		if (_retval && !_caught) {                 \
+		_returned = 1;                             \
+	 		_caught = 1;                       \
+			_retval = CONCAT(catch_func_, __LINE__)(); \
 		}                                          \
-		                                           \
-		inline int catch_func() {                  \
-			__label__ _ret, _dummy;            \
-			if (0) {                           \
-		_ret:                                      \
+		inline int CONCAT(catch_func_, __LINE__)() {                  \
+			__label__ _ret;                    \
+			switch (_retval) {                 \
+			_ret:                              \
 				_returned = 0;             \
 				return 0;                  \
-			}                                  \
-			{
-#define catch                                 _catch_start \
-		_dummy
-#define catch_as(var)                         _catch_start \
-				int var = _retval;         \
-		_dummy
-//		      :
+			default:                           \
+				_caught = 0;               \
+				return _retval;            \
+			case
+//		     0:
 //				exception handler
 #define throw \
 				do {return _retval;} while (0)
@@ -55,36 +50,19 @@
 			goto _ret;                         \
 		}                                          \
 		                                           \
-		auto inline void finally_func();           \
 		{                                          \
-			__label__ _finally;                \
-			_finally = &&_finally;             \
-			if (0) {                           \
-		_finally:                                  \
-				finally_func();            \
-				goto _post_finally;        \
-			}                                  \
-		}                                          \
-		                                           \
-		inline void finally_func() {               \
-			__label__ _ret, _dummy;            \
-			if (0) {                           \
+			__label__ _ret;                    \
+			switch (0) {                       \
 		_ret:                                      \
-				return;                    \
-			}                                  \
-			{                                  \
-		_dummy
+				goto _out;                 \
+		default
 //		      :
 //				cleanup code
 //			}
 #define endtry                                             \
 			goto _ret;                         \
 		}                                          \
-		_retval = try_func();                      \
-		if (_retval) goto *_catch;                 \
-	_post_catch:                                       \
-		goto *_finally;                            \
-	_post_finally:                                     \
+	_out:                                              \
 		if (_returned) return _retval;             \
 	} do {} while (0)
 

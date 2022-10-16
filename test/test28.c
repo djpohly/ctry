@@ -3,18 +3,17 @@
 
 int main(void)
 {
-	fprintf(stderr, "error with catch+throw and finally\n");
+	fprintf(stderr, "error matches the second case\n");
 
 	try {
 		return 3;
+	catch 5:
+		printf("NOPE\n");
 	catch 3:
 		printf("caught\n");
-		throw;
-	finally:
-		printf("finally\n");
 	} endtry;
 
-	printf("NOPE\n");
+	printf("after\n");
 
 	return 0;
 }

@@ -6,7 +6,8 @@ int main(void)
 	fprintf(stderr, "empty block with catch+error\n");
 
 	try {
-	catch:
+
+	catch 3:
 		printf("NOPE\n");
 		return 3;
 	} endtry;
