@@ -6,10 +6,11 @@ int main(void)
 	fprintf(stderr, "empty block with catch+return\n");
 
 	try {
-		catch {
-			printf("NOPE\n");
-			return 0;
-		}
+
+	}
+	catch {
+		printf("NOPE\n");
+		return 0;
 	} endtry;
 
 	printf("after\n");

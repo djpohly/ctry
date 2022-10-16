@@ -6,7 +6,9 @@ int main(void)
 	fprintf(stderr, "empty block with finally\n");
 
 	try {
-		finally printf("finally\n");
+
+	} finally {
+		printf("finally\n");
 	} endtry;
 
 	printf("after\n");

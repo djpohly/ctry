@@ -7,13 +7,12 @@ int main(void)
 
 	try {
 		try {
-			finally {
-				printf("inner\n");
-			}
+
+		} finally {
+			printf("inner\n");
 		} endtry;
-		finally {
-			printf("outer\n");
-		}
+	} finally {
+		printf("outer\n");
 	} endtry;
 
 	printf("after\n");

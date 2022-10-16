@@ -7,7 +7,8 @@ int main(void)
 
 	try {
 		return 3;
-		finally printf("finally\n");
+	} finally {
+		printf("finally\n");
 	} endtry;
 
 	printf("NOPE\n");

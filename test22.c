@@ -7,14 +7,11 @@ int main(void)
 
 	try {
 		return 5;
-
-		catch {
-			printf("caught\n");
-			return 3;
-		}
-		finally {
-			printf("finally\n");
-		}
+	} catch {
+		printf("caught\n");
+		return 3;
+	} finally {
+		printf("finally\n");
 	} endtry;
 
 	printf("NOPE\n");
