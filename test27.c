@@ -3,15 +3,20 @@
 
 int main(void)
 {
-	fprintf(stderr, "try with break inside loop\n");
+	fprintf(stderr, "specific catch cases\n");
 
-	int i;
-	for (i = 0; i < 4; i++) {
-		try {
-			printf("%d\n", i);
+	try {
+		return 5;
+
+		catch {
+		case 3:
+			printf("NOPE\n");
 			break;
-		} endtry_loop;
-	}
+		case 5:
+			printf("caught\n");
+			break;
+		}
+	} endtry;
 
 	printf("after\n");
 

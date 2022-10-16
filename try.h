@@ -8,22 +8,16 @@
 		     *_finally = &&_post_finally;          \
 		int _retval = 0;                           \
 		int _returned = 1;                         \
-		int _broke = 1;                            \
-		int _contd = 0;                            \
 		inline int try_func() {                    \
-			__label__ _ret, _do;               \
+			__label__ _ret;                    \
 			if (0) {                           \
 		_ret:                                      \
 				_returned = 0;             \
 				return 0;                  \
-			}                                  \
-			for (; !_contd; _contd = 1) {
-//				{
-//					stuff to try
+			}
+//			{
+//				stuff to try
 #define catch \
-				}                          \
-				_broke = 0;                \
-				break;                     \
 			}                                  \
 			goto _ret;                         \
 		}                                          \
@@ -40,24 +34,21 @@
 		}                                          \
 		                                           \
 		inline int catch_func() {                  \
-			__label__ _ret, _do;               \
+			__label__ _ret;                    \
 			if (0) {                           \
 		_ret:                                      \
 				_returned = 0;             \
 				return 0;                  \
 			}                                  \
-			while (1) {                        \
-				{
-//					{
-//						exception handler
+			switch (_retval) {                 \
+				default:
+//				{
+//					exception handler
 #define throw \
-						do {return _retval;} while (0)
-//					}
+					do {return _retval;} while (0)
+//				}
 
 #define finally                                            \
-				}                          \
-				_broke = 0;                \
-				break;                     \
 			}                                  \
 			goto _ret;                         \
 		}                                          \
@@ -74,41 +65,28 @@
 		}                                          \
 		                                           \
 		inline void finally_func() {               \
-			__label__ _ret, _do;               \
+			__label__ _ret;                    \
 			if (0) {                           \
 		_ret:                                      \
 				return;                    \
 			}                                  \
-			while (1) {                        \
-				{
-//					{
-//						cleanup code
-//					}
+			{
+//				{
+//					cleanup code
 //				}
-#define _endtry_start                                      \
-				_broke = 0;                \
-				break;                     \
-			}                                  \
+//			}
+#define endtry                                             \
 			goto _ret;                         \
 		}                                          \
 		_retval = try_func();                      \
-		if (_retval) fprintf(stderr, "  try: \e[30;41;1merror\e[m\n"); \
-		else if (_returned) fprintf(stderr, "  try: \e[30;42;1mreturn\e[m\n"); \
-		else if (_contd) fprintf(stderr, "  try: \e[30;46;1mcontinue\e[m\n"); \
-		else if (_broke) fprintf(stderr, "  try: \e[30;44;1mbreak\e[m\n"); \
-		else fprintf(stderr, "  try: normal\n"); \
 		if (_retval) goto *_catch;                 \
 	_post_catch:                                       \
 		goto *_finally;                            \
 	_post_finally:                                     \
-		if (_retval || _returned) return _retval;
-#define _endtry_in_loop                                    \
-		if (_contd) continue;                      \
-		if (_broke) break;
-#define _endtry_end                                        \
+		if (_retval || _returned) return _retval;  \
 	} do {} while (0)
-
-#define endtry _endtry_start _endtry_end
-#define endtry_loop _endtry_start _endtry_in_loop _endtry_end
+// We swallow the semicolon this way rather than enclosing the entire try in a
+// do/while block so that attempts to use break or continue will fail to compile
+// rather than misbehaving.
 
 #endif
