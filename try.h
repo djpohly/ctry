@@ -15,12 +15,10 @@
 				_returned = 0;             \
 				return 0;                  \
 			}                                  \
-			{
-//				{
-//					stuff to try
-//				}
+//			{
+//				stuff to try
+//			}
 #define catch                                              \
-			}                                  \
 			goto _ret;                         \
 		}                                          \
 		auto inline int catch_func();              \
@@ -38,21 +36,18 @@
 		inline int catch_func() {                  \
 			__label__ _ret;                    \
 			if (0) {                           \
-			}                                  \
-			switch (_retval) {                 \
 		_ret:                                      \
 				_returned = 0;             \
 				return 0;                  \
-			default:
+			}
 
-//				{
-//					exception handler
+//			{
+//				exception handler
 #define throw \
-					do {return _retval;} while (0)
-//				}
+				do {return _retval;} while (0)
+//			}
 
 #define finally                                            \
-			}                                  \
 			goto _ret;                         \
 		}                                          \
 		                                           \
@@ -72,13 +67,11 @@
 			if (0) {                           \
 		_ret:                                      \
 				return;                    \
-			}                                  \
-			{
-//				{
-//					cleanup code
-//				}
+			}
+//			{
+//				cleanup code
+//			}
 #define endtry                                             \
-			}                                  \
 			goto _ret;                         \
 		}                                          \
 		_retval = try_func();                      \
