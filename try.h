@@ -1,8 +1,8 @@
 #ifndef _TRY_H
 #define _TRY_H
 
-#define CONCAT(x, y) CONCAT_SIMPLE(x, y)
-#define CONCAT_SIMPLE(x, y) x ## y
+#define CONCAT(x, y) _CONCAT(x, y)
+#define _CONCAT(x, y) x ## y
 
 #define try                                                \
 	{                                                  \
@@ -21,30 +21,32 @@
 			}                                  \
 //			{
 //				stuff to try
-#define catch                                              \
+#define catch_all _catch_all_fn(CONCAT(_catch_, __LINE__))
+#define _catch_all_fn(FN)                                  \
 			}                                  \
 			goto _ret;                         \
 		}                                          \
-		auto inline int CONCAT(catch_func_, __LINE__)();              \
+		auto inline int FN();                      \
 		if (_retval && !_caught) {                 \
-		_returned = 1;                             \
+			_returned = 1;                     \
 	 		_caught = 1;                       \
-			_retval = CONCAT(catch_func_, __LINE__)(); \
+			_retval = FN();                    \
 		}                                          \
-		inline int CONCAT(catch_func_, __LINE__)() {                  \
+		inline int FN() {                          \
 			__label__ _ret;                    \
 			switch (_retval) {                 \
 			_ret:                              \
 				_returned = 0;             \
 				return 0;                  \
-			default:                           \
+			default
+#define catch catch_all \
+			       :                           \
 				_caught = 0;               \
 				return _retval;            \
 			case
-//		     0:
+//			     0:
 //				exception handler
-#define throw \
-				do {return _retval;} while (0)
+#define throw			do {return _retval;} while (0)
 #define finally                                            \
 			}                                  \
 			goto _ret;                         \
@@ -56,7 +58,7 @@
 		_ret:                                      \
 				goto _out;                 \
 		default
-//		      :
+//		       :
 //				cleanup code
 //			}
 #define endtry                                             \
@@ -67,8 +69,7 @@
 	} do {} while (0)
 
 
-// We are intentional about not wrapping any user code in a loop or a switch so
-// that attempts to use break or continue will fail to compile rather than
-// misbehaving.
+// We are intentional about not wrapping any user code in a loop so that
+// attempts to continue will fail to compile rather than misbehaving.
 
 #endif

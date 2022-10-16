@@ -7,7 +7,7 @@ int main(void)
 
 	try {
 		return 3;
-	catch 3:
+	catch_all:
 		printf("caught\n");
 		throw;
 	finally:
