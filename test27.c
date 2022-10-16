@@ -7,15 +7,13 @@ int main(void)
 
 	try {
 		return 5;
-
-		catch {
-		case 3:
-			printf("NOPE\n");
-			break;
-		case 5:
-			printf("caught\n");
-			break;
-		}
+	} catch {
+	case 3:
+		printf("NOPE\n");
+		break;
+	case 5:
+		printf("caught\n");
+		break;
 	} endtry;
 
 	printf("after\n");
