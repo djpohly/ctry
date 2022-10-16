@@ -81,7 +81,7 @@
 	_post_catch:                                       \
 		goto *_finally;                            \
 	_post_finally:                                     \
-		if (_retval || _returned) return _retval;  \
+		if (_returned) return _retval;             \
 	} do {} while (0)
 
 // We swallow the semicolon this way rather than enclosing the entire try in a
