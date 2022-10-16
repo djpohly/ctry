@@ -40,6 +40,8 @@
 				_returned = 0;             \
 				return 0;                  \
 			}
+#define catch_as(var)                                catch \
+			int var = _retval;
 
 //			{
 //				exception handler
