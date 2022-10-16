@@ -1,0 +1,4 @@
+inner
+outer
+after
+0
