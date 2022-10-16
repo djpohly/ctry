@@ -1,25 +1,22 @@
-CFLAGS = -O3
+CFLAGS = -O3 -I.
 
-TESTS = test00 test01 test02 test03 test04 test05 test06 test07 test08 test09
-TESTS+= test10 test11 test12 test13 test14 test15 test16 test17 test18 test19
-TESTS+= test20 test21 test22 test23 test24 test25 test26 test27
+TESTS = $(addprefix test, 00 01 02 03 04 05 06 07 08 09 \
+                          10 11 12 13 14 15 16 17 18 19 \
+                          20 21 22 23 24 25 26 27)
 
-TEST_OBJS = $(addsuffix .o, $(TESTS))
+TEST_BINS = $(addprefix test/, $(TESTS))
+TEST_OBJS = $(addsuffix .o, $(TEST_BINS))
 
-TEST_TARGETS = $(addprefix run-, $(TESTS))
+.PHONY: test clean $(TEST)
 
-.PHONY: all test clean $(TEST_TARGETS)
-
-all: $(TESTS)
-
-test: $(TEST_TARGETS)
+test: $(TESTS)
 
 clean:
-	$(RM) $(TESTS) $(TEST_OBJS)
+	$(RM) $(TEST_BINS) $(TEST_OBJS)
 
-$(TEST_TARGETS): run-test%: test%
-	(./$<; echo $$?) | diff -u ref$*.txt -
+$(TESTS): test%: test/test%
+	(./$<; echo $$?) | diff -u test/ref$*.txt -
 
-$(TESTS): %: %.o
+$(TEST_BINS): %: %.o
 
 $(TEST_OBJS): try.h
