@@ -7,7 +7,7 @@ int main(void)
 
 	try {
 		return 3;
-	} finally {
+	finally:
 		printf("finally\n");
 	} endtry;
 

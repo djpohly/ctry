@@ -7,7 +7,7 @@ int main(void)
 
 	try {
 		return 5;
-	} catch_as(e) {
+	catch_as(e):
 		if (e == 5) {
 			printf("caught\n");
 		}

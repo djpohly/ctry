@@ -17,8 +17,8 @@
 			}                                  \
 //			{
 //				stuff to try
-//			}
-#define catch                                              \
+#define _catch_start                                       \
+			}                                  \
 			goto _ret;                         \
 		}                                          \
 		auto inline int catch_func();              \
@@ -34,22 +34,24 @@
 		}                                          \
 		                                           \
 		inline int catch_func() {                  \
-			__label__ _ret;                    \
+			__label__ _ret, _dummy;            \
 			if (0) {                           \
 		_ret:                                      \
 				_returned = 0;             \
 				return 0;                  \
-			}
-#define catch_as(var)                                catch \
-			int var = _retval;
-
-//			{
+			}                                  \
+			{
+#define catch                                 _catch_start \
+		_dummy
+#define catch_as(var)                         _catch_start \
+				int var = _retval;         \
+		_dummy
+//		      :
 //				exception handler
 #define throw \
 				do {return _retval;} while (0)
-//			}
-
 #define finally                                            \
+			}                                  \
 			goto _ret;                         \
 		}                                          \
 		                                           \
@@ -65,12 +67,14 @@
 		}                                          \
 		                                           \
 		inline void finally_func() {               \
-			__label__ _ret;                    \
+			__label__ _ret, _dummy;            \
 			if (0) {                           \
 		_ret:                                      \
 				return;                    \
-			}
-//			{
+			}                                  \
+			{                                  \
+		_dummy
+//		      :
 //				cleanup code
 //			}
 #define endtry                                             \
@@ -84,8 +88,9 @@
 		if (_returned) return _retval;             \
 	} do {} while (0)
 
-// We swallow the semicolon this way rather than enclosing the entire try in a
-// do/while block so that attempts to use break or continue will fail to compile
-// rather than misbehaving.
+
+// We are intentional about not wrapping any user code in a loop or a switch so
+// that attempts to use break or continue will fail to compile rather than
+// misbehaving.
 
 #endif

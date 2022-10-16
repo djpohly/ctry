@@ -7,9 +7,9 @@ int main(void)
 
 	try {
 
-	} catch {
+	catch:
 		printf("NOPE\n");
-	} finally {
+	finally:
 		printf("finally\n");
 	} endtry;
 

@@ -8,10 +8,10 @@ int main(void)
 	try {
 		try {
 
-		} finally {
+		finally:
 			printf("inner\n");
 		} endtry;
-	} finally {
+	finally:
 		printf("outer\n");
 	} endtry;
 
